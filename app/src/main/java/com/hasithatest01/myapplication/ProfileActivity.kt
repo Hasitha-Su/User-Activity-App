@@ -18,7 +18,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity2 : AppCompatActivity() {
+class ProfileActivity : AppCompatActivity() {
 
     lateinit var imageView2: ImageView
     private var imageUri2: Uri? = null
@@ -37,9 +37,9 @@ class MainActivity2 : AppCompatActivity() {
         var obj = intent.extras?.getParcelable("message_key") as User?
 
         if (obj != null) {
-            textView1.text = obj.firstName
-            textView2.text = obj.lastName
-            imageUri2 = Uri.parse( obj.imagePath)
+            textView1.text = obj.Name
+            textView2.text = obj.Email
+            imageUri2 = Uri.parse( obj.ProfileImg)
             imageView2.setImageURI(imageUri2)
         }
     }
