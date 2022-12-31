@@ -4,9 +4,6 @@ plugins {
     id 'kotlin-parcelize'
 }
 
-
-
-
 android {
     namespace 'com.hasithatest01.myapplication'
     compileSdk 33

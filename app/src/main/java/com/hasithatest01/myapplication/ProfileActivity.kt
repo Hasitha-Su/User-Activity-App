@@ -20,8 +20,8 @@ import androidx.appcompat.app.AppCompatActivity
 
 class ProfileActivity : AppCompatActivity() {
 
-    lateinit var imageView2: ImageView
-    private var imageUri2: Uri? = null
+    lateinit var userImageView: ImageView
+    private var userImageUri: Uri? = null
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,18 +29,27 @@ class ProfileActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main2)
 
-        imageView2 = findViewById(R.id.imageView)
+        userImageView = findViewById(R.id.imageView)
 
-        val textView1 = findViewById<TextView>(R.id.text_view_id1)
-        val textView2 = findViewById<TextView>(R.id.text_view_id2)
+        val nameTextView = findViewById<TextView>(R.id.NameView)
+        val emailTextView = findViewById<TextView>(R.id.EmailView)
+        val ageTextView = findViewById<TextView>(R.id.AgeView)
+        val phoneNumTextView = findViewById<TextView>(R.id.PhoneNumView)
 
-        var obj = intent.extras?.getParcelable("message_key") as User?
+        var obj = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.extras?.getParcelable("userInfo", RegisterInfoActivity::class.java) as User?
+        } else {
+            intent.extras?.getParcelable("userInfo") as User?
+        }
 
         if (obj != null) {
-            textView1.text = obj.Name
-            textView2.text = obj.Email
-            imageUri2 = Uri.parse( obj.ProfileImg)
-            imageView2.setImageURI(imageUri2)
+            nameTextView.text = obj.name
+            emailTextView.text = obj.email
+            ageTextView.text = obj.age
+            phoneNumTextView.text = obj.phoneNum
+
+            userImageUri = Uri.parse( obj.userImg)
+            userImageView.setImageURI(userImageUri)
         }
     }
 }
