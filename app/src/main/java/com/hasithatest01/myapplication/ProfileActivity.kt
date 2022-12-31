@@ -36,19 +36,19 @@ class ProfileActivity : AppCompatActivity() {
         val ageTextView = findViewById<TextView>(R.id.AgeView)
         val phoneNumTextView = findViewById<TextView>(R.id.PhoneNumView)
 
-        var obj = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        var userObj = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent.extras?.getParcelable("userInfo", RegisterInfoActivity::class.java) as User?
         } else {
             intent.extras?.getParcelable("userInfo") as User?
         }
 
-        if (obj != null) {
-            nameTextView.text = obj.name
-            emailTextView.text = obj.email
-            ageTextView.text = obj.age
-            phoneNumTextView.text = obj.phoneNum
+        if (userObj != null) {
+            nameTextView.text = userObj.name
+            emailTextView.text = userObj.email
+            ageTextView.text = userObj.age
+            phoneNumTextView.text = userObj.phoneNum
 
-            userImageUri = Uri.parse( obj.userImg)
+            userImageUri = Uri.parse( userObj.userImg)
             userImageView.setImageURI(userImageUri)
         }
     }

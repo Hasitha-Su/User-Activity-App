@@ -58,7 +58,7 @@ class RegisterInfoActivity : AppCompatActivity() {
         editPhoneNum = findViewById(R.id.editTextPhone)
 
         btnGetUserImage.setOnClickListener {
-            if (checkAndRequestPermissions(this@RegisterInfoActivity)) {
+            if (checkRequiresPermission(this@RegisterInfoActivity)) {
                 selectProfileImageSource(this@RegisterInfoActivity)
             }
         }
@@ -103,15 +103,11 @@ class RegisterInfoActivity : AppCompatActivity() {
             "Camera",
             "Choose from Gallery",
             "Exit"
-        ) // create a menuOption Array
+        ) // create a menu option Array
 
-        // create a dialog for showing the optionsMenu
         val builder = AlertDialog.Builder(context)
 
-        // set the items in builder
-        builder.setItems(
-            optionsMenu
-        ) { dialogInterface, i ->
+        builder.setItems(optionsMenu) { dialogInterface, i ->
 
             if (optionsMenu[i] == "Camera") {
                 val takePicture = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -123,7 +119,6 @@ class RegisterInfoActivity : AppCompatActivity() {
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 )
                 startActivityForResult(pickPhoto, 1)
-                //selectImageFromGallery()
 
             } else if (optionsMenu[i] == "Exit") {
                 dialogInterface.dismiss()
@@ -132,37 +127,27 @@ class RegisterInfoActivity : AppCompatActivity() {
         builder.show()
     }
 
-    // function to check permission
-    private fun checkAndRequestPermissions(context: Activity?): Boolean {
+    //Check if necessary permissions are provided
+    private fun checkRequiresPermission(context: Activity?): Boolean {
 
-        val WExtstorePermission = ContextCompat.checkSelfPermission(
-            context!!,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
+        val writeToExtStorePermission = ContextCompat.checkSelfPermission(context!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        val cameraPermission = ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
 
-        val cameraPermission = ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.CAMERA
-        )
-
-        val listPermissionsNeeded: MutableList<String> = ArrayList()
+        val requiresPermissionList: MutableList<String> = ArrayList()
 
         if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded.add(Manifest.permission.CAMERA)
+            requiresPermissionList.add(Manifest.permission.CAMERA)
         }
 
-        if (WExtstorePermission != PackageManager.PERMISSION_GRANTED) {
-            listPermissionsNeeded
-                .add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if (writeToExtStorePermission != PackageManager.PERMISSION_GRANTED) {
+            requiresPermissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
         }
-        if (listPermissionsNeeded.isNotEmpty()) {
-            ActivityCompat.requestPermissions(
-                context,
-                listPermissionsNeeded.toTypedArray(),
-                REQUEST_ID_MULTIPLE_PERMISSIONS
-            )
+
+        if (requiresPermissionList.isNotEmpty()) {
+            ActivityCompat.requestPermissions( context, requiresPermissionList.toTypedArray(), REQUEST_ID_MULTIPLE_PERMISSIONS)
             return false
         }
+
         return true
     }
 
